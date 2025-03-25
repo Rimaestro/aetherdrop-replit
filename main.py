@@ -1,5 +1,17 @@
 import logging
-import os
+from telegram import Update
+from telegram.ext import (
+    Application, CommandHandler, MessageHandler, CallbackQueryHandler,
+    filters, ConversationHandler, ContextTypes
+)
+
+# Import dari package app
+from app import database
+from app.config import TOKEN
+from app.handlers import (
+    start_command, help_command, handle_forwarded_message,
+    list_airdrops, search_command, button_callback, handle_notes_message
+)
 from app.keep_alive import keep_alive
 
 # Konfigurasi logging
@@ -9,34 +21,40 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-def check_environment():
-    """Fungsi untuk memeriksa apakah lingkungan dapat berjalan dengan baik."""
-    logger.info("Memeriksa lingkungan...")
+def main():
+    """Fungsi utama untuk menjalankan bot."""
+    # Membuat tabel database jika belum ada
+    database.create_tables()
     
-    # Memeriksa token
-    token = os.getenv('TELEGRAM_BOT_TOKEN')
-    if not token:
-        logger.warning("TELEGRAM_BOT_TOKEN tidak ditemukan. Pastikan Anda telah mengatur Secrets di Replit.")
-    else:
-        logger.info("TELEGRAM_BOT_TOKEN ditemukan.")
+    # Inisialisasi aplikasi
+    application = Application.builder().token(TOKEN).build()
     
-    # Memeriksa user ID
-    user_id = os.getenv('AUTHORIZED_USER_ID')
-    if not user_id:
-        logger.warning("AUTHORIZED_USER_ID tidak ditemukan. Pastikan Anda telah mengatur Secrets di Replit.")
-    else:
-        logger.info("AUTHORIZED_USER_ID ditemukan.")
+    # Menambahkan handler untuk perintah
+    application.add_handler(CommandHandler("start", start_command))
+    application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler("list", list_airdrops))
+    application.add_handler(CommandHandler("search", search_command))
     
-    logger.info("Pemeriksaan lingkungan selesai. Bot siap dijalankan!")
+    # Handler untuk tombol inline
+    application.add_handler(CallbackQueryHandler(button_callback))
+    
+    # Handler untuk pesan yang diteruskan
+    application.add_handler(
+        MessageHandler(filters.FORWARDED, handle_forwarded_message)
+    )
+    
+    # Handler untuk pesan catatan
+    application.add_handler(
+        MessageHandler(filters.TEXT & ~filters.COMMAND, handle_notes_message)
+    )
+    
+    # Mulai polling
+    logger.info("Bot mulai berjalan...")
+    application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 if __name__ == "__main__":
-    logger.info("Memulai program...")
-    
     # Jalankan server Flask di thread terpisah untuk mencegah Replit sleep
     keep_alive()
     
-    # Periksa lingkungan
-    check_environment()
-    
-    logger.info("Program berjalan dengan baik! Lingkungan Replit siap untuk bot Telegram.")
-    logger.info("Untuk menjalankan bot penuh, hapus kode pengujian ini dan kembalikan ke kode bot asli.") 
+    # Jalankan bot
+    main() 
