@@ -1,23 +1,4 @@
 run = "python main.py"
-entrypoint = "main.py"
-modules = ["python-3.10:v25-20230920-d4ad2e4"]
-
-hidden = [".pythonlibs"]
-
-[nix]
-channel = "stable-23_11"
-
-[env]
-# Gunakan Secrets Replit untuk konfigurasi token dan authorized user ID
-PYTHONPATH = "${REPL_HOME}"
-PATH = "${REPL_HOME}/.pythonlibs/bin:${PATH}"
-
-[unitTest]
 language = "python3"
-
-[gitHubImport]
-requiredFiles = [".replit", "replit.nix", "pyproject.toml", ".env.example", "README.md"]
-
-[deployment]
-run = ["python", "main.py"]
-deploymentTarget = "cloudrun" 
+entrypoint = "main.py"
+# Sangat sederhana untuk menghindari masalah Nix 
