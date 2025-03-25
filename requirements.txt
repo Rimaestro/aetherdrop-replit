@@ -1,4 +1,6 @@
-python-telegram-bot==20.7  # Versi terbaru library bot Telegram pada 2025
-python-dotenv==1.0.0       # Untuk mengelola variabel lingkungan
-flask==3.0.0               # Untuk web server anti-sleep di Replit
+python-telegram-bot==20.7         # Versi terbaru library bot Telegram pada 2025
+python-dotenv==1.0.0              # Untuk mengelola variabel lingkungan
+flask==3.0.0                      # Untuk web server anti-sleep di Replit
+requests==2.31.0                  # Untuk melakukan HTTP requests
+urllib3==2.0.4                    # Dependensi dari requests
 # sqlite3 sudah termasuk dalam Python standar 

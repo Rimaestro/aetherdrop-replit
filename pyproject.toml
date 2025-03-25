@@ -2,10 +2,10 @@
 name = "aetherdrop-bot"
 version = "1.0.0"
 description = "Bot Telegram untuk mencatat dan mengelola airdrop cryptocurrency secara otomatis"
-authors = ["Your Name <your.email@example.com>"]
+authors = ["AetherDrop <your.email@example.com>"]
 
 [tool.poetry.dependencies]
-python = ">=3.8.0,<3.11"
+python = ">=3.8.0,<3.12"
 python-telegram-bot = "^20.7"
 python-dotenv = "^1.0.0"
 flask = "^3.0.0"
