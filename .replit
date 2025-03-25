@@ -1,0 +1,23 @@
+run = "python main.py"
+entrypoint = "main.py"
+modules = ["python-3.10:v18-20230807-322e88b"]
+
+hidden = [".pythonlibs"]
+
+[nix]
+channel = "stable-23_05"
+
+[env]
+# Gunakan Secrets Replit untuk konfigurasi token dan authorized user ID
+PYTHONPATH = "${REPL_HOME}"
+PATH = "${REPL_HOME}/.pythonlibs/bin:${PATH}"
+
+[unitTest]
+language = "python3"
+
+[gitHubImport]
+requiredFiles = [".replit", "replit.nix", "pyproject.toml", ".env.example", "README.md"]
+
+[deployment]
+run = ["python", "main.py"]
+deploymentTarget = "cloudrun" 
